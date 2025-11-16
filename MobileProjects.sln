@@ -4,6 +4,8 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownEditor", "MarkdownEditor\MarkdownEditor.csproj", "{DF3D0135-230B-BDFB-9AFB-E207C07C6A24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpMobileApp", "CSharpMobileApp\CSharpMobileApp.csproj", "{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,12 @@ Global
 		{DF3D0135-230B-BDFB-9AFB-E207C07C6A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF3D0135-230B-BDFB-9AFB-E207C07C6A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF3D0135-230B-BDFB-9AFB-E207C07C6A24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F59749-B5BD-A3BE-9C5E-76AADDE29BF6}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
