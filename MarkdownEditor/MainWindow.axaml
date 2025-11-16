@@ -2,14 +2,66 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="MarkdownEditor.MainWindow"
         Title="Markdown Editor"
-        Width="400"
-        Height="800">
+        Width="600"
+        Height="600"
+		WindowStartupLocation="CenterScreen">
+	
+		<Window.Styles>
+			<Style Selector="RadioButton.mode-switch">
+				<Setter Property="Background" Value="#333333"/>
+				<Setter Property="Foreground" Value="White"/>
+				<Setter Property="BorderBrush" Value="#555555"/>
+				<Setter Property="BorderThickness" Value="1"/>
+				<Setter Property="Padding" Value="0"/>
+				<Setter Property="Template">
+					<ControlTemplate TargetType="RadioButton">
+						<Border Background="{TemplateBinding Background}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								CornerRadius="4">
+							<StackPanel Orientation="Horizontal" Margin="8,4">
+								<Border x:Name="Indicator"
+										Width="14" Height="14"
+										CornerRadius="2"
+										BorderBrush="White"
+										BorderThickness="2"
+										Margin="0,0,6,0"/>
+								<ContentPresenter
+										Content="{TemplateBinding Content}"
+										VerticalAlignment="Center"
+										Margin="6,0,0,0"
+										Foreground="{TemplateBinding Foreground}" />
+							</StackPanel>
+						</Border>
+					</ControlTemplate>
+				</Setter>
+			</Style>
+			<Style Selector="RadioButton.mode-switch:checked /template/ Border#Indicator">
+				<Setter Property="Background" Value="LimeGreen"/>
+			</Style>
+			<Style Selector="RadioButton.mode-switch:pointerover">
+				<Setter Property="Background" Value="#444444"/>
+				<Setter Property="BorderBrush" Value="#AAAAAA"/>
+			</Style>
+			<Style Selector="RadioButton.mode-switch:pressed">
+				<Setter Property="Background" Value="#555555"/>
+			</Style>
+			<Style Selector="RadioButton.mode-switch:checked /template/ Border#Indicator">
+				<Setter Property="Background" Value="LimeGreen"/>
+			</Style>
+			<Style Selector="RadioButton.mode-switch:pointerover /template/ Border#Indicator">
+				<Setter Property="BorderBrush" Value="#FFFFFF"/>
+			</Style>
+		</Window.Styles>
 
-    <DockPanel>
+
+		<DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Файл">
-                <MenuItem Header="Открыть" Click="OpenFile_Click" />
+            <MenuItem Header="Файл" FontSize="16" FontWeight="Bold" Padding="10,5" Background="#333333" Foreground="White">
+				<MenuItem Header="Открыть" Click="OpenFile_Click" />
+				<Separator />
                 <MenuItem Header="Сохранить" Click="SaveFile_Click" />
+				<Separator />
                 <MenuItem Header="Экспорт" Click="ExportFile_Click" />
                 <Separator />
                 <MenuItem Header="Выход" Click="Exit_Click" />
@@ -17,9 +69,12 @@
         </Menu>
 
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <RadioButton Name="EditModeRadio" Content="Редактор" IsChecked="True" Margin="10,0" />
-            <RadioButton Name="PreviewModeRadio" Content="Превью" Margin="10,0" />
-        </StackPanel>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+				<RadioButton Name="EditModeRadio" Classes="mode-switch" Content="Редактор" IsChecked="True" Margin="10,0" />
+				<RadioButton Name="PreviewModeRadio" Classes="mode-switch" Content="Превью" Margin="10,0" />
+			</StackPanel>
+
+		</StackPanel>
 
         <Grid>
             <TextBox Name="MarkdownEditor"
