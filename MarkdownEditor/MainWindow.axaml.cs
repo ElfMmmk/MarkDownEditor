@@ -1,11 +1,12 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
+using HtmlAgilityPack;
+using Markdig;
 using MarkdownEditor.Models;
 using MarkdownEditor.Services;
-using Markdig;
-using HtmlAgilityPack;
 using System;
 using System.IO;
 using System.Linq;
@@ -382,22 +383,62 @@ namespace MarkdownEditor
                 TextWrapping = Avalonia.Media.TextWrapping.Wrap
             };
 
-            var text = "";
             foreach (var child in node.ChildNodes)
             {
                 if (child.NodeType == HtmlNodeType.Text)
                 {
-                    text += child.InnerText;
+                    var text = child.InnerText;
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        textBlock.Inlines.Add(new Run(text));
+                    }
                 }
                 else if (child.NodeType == HtmlNodeType.Element)
                 {
-                    text += child.InnerText;
+                    var inline = CreateInlineFromNode(child);
+                    if (inline != null)
+                    {
+                        textBlock.Inlines.Add(inline);
+                    }
                 }
             }
 
-            textBlock.Text = text;
             return textBlock;
         }
+
+        private Inline? CreateInlineFromNode(HtmlNode node)
+        {
+            var text = node.InnerText;
+            if (string.IsNullOrWhiteSpace(text))
+                return null;
+
+            var run = new Run(text);
+
+            switch (node.Name.ToLower())
+            {
+                case "strong":
+                case "b":
+                    run.FontWeight = Avalonia.Media.FontWeight.Bold;
+                    break;
+
+                case "em":
+                case "i":
+                    run.FontStyle = Avalonia.Media.FontStyle.Italic;
+                    break;
+
+                case "del":
+                case "s":
+                    run.TextDecorations = Avalonia.Media.TextDecorations.Strikethrough;
+                    break;
+
+                case "code":
+                    run.FontFamily = "Consolas, Monaco, monospace";
+                    break;
+            }
+
+            return run;
+        }
+
 
         private StackPanel CreateList(HtmlNode listNode, bool isOrdered)
         {

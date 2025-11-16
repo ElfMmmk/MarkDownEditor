@@ -19,17 +19,17 @@
 								BorderBrush="{TemplateBinding BorderBrush}"
 								BorderThickness="{TemplateBinding BorderThickness}"
 								CornerRadius="4">
-							<StackPanel Orientation="Horizontal" Margin="8,4">
+							<StackPanel Orientation="Horizontal" Margin="10,5,5,5" HorizontalAlignment="Left">
 								<Border x:Name="Indicator"
 										Width="14" Height="14"
 										CornerRadius="2"
 										BorderBrush="White"
 										BorderThickness="2"
-										Margin="0,0,6,0"/>
+										Margin="0,0,10,0"/>
 								<ContentPresenter
 										Content="{TemplateBinding Content}"
 										VerticalAlignment="Center"
-										Margin="6,0,0,0"
+										Margin="0,0,10,0"
 										Foreground="{TemplateBinding Foreground}" />
 							</StackPanel>
 						</Border>
@@ -68,8 +68,8 @@
             </MenuItem>
         </Menu>
 
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+        <StackPanel DockPanel.Dock="Top">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
 				<RadioButton Name="EditModeRadio" Classes="mode-switch" Content="Редактор" IsChecked="True" Margin="10,0" />
 				<RadioButton Name="PreviewModeRadio" Classes="mode-switch" Content="Превью" Margin="10,0" />
 			</StackPanel>
