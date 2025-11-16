@@ -1,0 +1,26 @@
+﻿using System;
+using System.Globalization;
+using Microsoft.Maui.Controls;
+
+namespace CSharpMobileApp.Converters
+{
+    public class BoolToColorConverter : IValueConverter
+    {
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is bool isCompleted && isCompleted)
+            {
+                // тёмно-зелёный
+                return Colors.DarkGreen;
+            }
+
+            // базовый цвет текста — чёрный (можешь поменять, если нужно другой)
+            return Colors.Black;
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

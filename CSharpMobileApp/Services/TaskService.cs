@@ -3,13 +3,14 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.Maui.Storage;
 using CSharpMobileApp.Models;
+using System.Collections.ObjectModel;
 
 
 namespace CSharpMobileApp.Services
 {
     public class TaskService
     {
-        private List<TodoTask> _tasks = new List<TodoTask>();
+        private ObservableCollection<TodoTask> _tasks = new ObservableCollection<TodoTask>();
         private int _nextId = 1;
 
         public TaskService()
@@ -17,7 +18,7 @@ namespace CSharpMobileApp.Services
             LoadTasks();
         }
 
-        public List<TodoTask> GetTasks()
+        public ObservableCollection<TodoTask> GetTasks()
         {
             return _tasks;
         }
@@ -70,7 +71,10 @@ namespace CSharpMobileApp.Services
             var tasksJson = Preferences.Get("tasks", string.Empty);
             if (!string.IsNullOrEmpty(tasksJson))
             {
-                _tasks = JsonSerializer.Deserialize<List<TodoTask>>(tasksJson) ?? new List<TodoTask>();
+                var list = JsonSerializer.Deserialize<List<TodoTask>>(tasksJson) ?? new List<TodoTask>();
+
+                _tasks = new ObservableCollection<TodoTask>(list);
+
                 if (_tasks.Any())
                 {
                     _nextId = _tasks.Max(t => t.Id) + 1;

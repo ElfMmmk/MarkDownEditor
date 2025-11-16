@@ -9,20 +9,24 @@
                 <DataTemplate>
                     <Grid ColumnDefinitions="*,Auto,Auto,Auto"
                           Padding="10">
-                        <Label Text="{Binding Text}"
-                               TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                        <Label Grid.Column="0"
+                               Text="{Binding Text}"
+                               TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}"
+                               TextColor="{Binding Completed, Converter={StaticResource BoolToColorConverter}}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
                         <CheckBox IsChecked="{Binding Completed}"
-                                  Grid.Column="1"/>
+                                  Grid.Column="1" />
                         <Button Text="Редактировать"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
                                 CommandParameter="{Binding .}"
                                 Grid.Column="2"
-                                Margin="5"/>
+                                Margin="5" />
                         <Button Text="Удалить"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
                                 CommandParameter="{Binding .}"
                                 Grid.Column="3"
-                                Margin="5"/>
+                                Margin="5" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -30,6 +34,6 @@
 
         <Button Grid.Row="1"
                 Text="Добавить"
-                Command="{Binding AddTaskCommand}"/>
+                Command="{Binding AddTaskCommand}" />
     </Grid>
 </ContentPage>
