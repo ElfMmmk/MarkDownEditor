@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="MarkdownEditor.MainWindow"
+        Title="Markdown Editor"
+        Width="400"
+        Height="800">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть" Click="OpenFile_Click" />
+                <MenuItem Header="Сохранить" Click="SaveFile_Click" />
+                <MenuItem Header="Экспорт" Click="ExportFile_Click" />
+                <Separator />
+                <MenuItem Header="Выход" Click="Exit_Click" />
+            </MenuItem>
+        </Menu>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <RadioButton Name="EditModeRadio" Content="Редактор" IsChecked="True" Margin="10,0" />
+            <RadioButton Name="PreviewModeRadio" Content="Превью" Margin="10,0" />
+        </StackPanel>
+
+        <Grid>
+            <TextBox Name="MarkdownEditor"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     FontFamily="Consolas"
+                     FontSize="14"
+                     Margin="5"
+                     IsVisible="{Binding #EditModeRadio.IsChecked}" />
+
+            <ScrollViewer Name="PreviewScrollViewer"
+                          Margin="5"
+                          IsVisible="{Binding #PreviewModeRadio.IsChecked}">
+                <Border Background="LightGray" Padding="10">
+                    <ContentControl Name="MarkdownPreview" />
+                </Border>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>
