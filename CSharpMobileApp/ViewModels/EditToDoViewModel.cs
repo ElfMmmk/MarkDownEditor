@@ -31,8 +31,12 @@ namespace CSharpMobileApp.ViewModels
             {
                 _taskText = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TaskText)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanSave)));
             }
         }
+
+        //  нопка "—охранить" активна только если текст не пустой
+        public bool CanSave => !string.IsNullOrWhiteSpace(TaskText);
 
         public ICommand EditTaskCommand { get; }
 

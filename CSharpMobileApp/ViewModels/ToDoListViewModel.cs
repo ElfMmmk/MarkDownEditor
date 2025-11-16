@@ -62,15 +62,19 @@ namespace CSharpMobileApp.ViewModels
         public ICommand AddTaskCommand { get; }
         public ICommand DeleteTaskCommand { get; }
         public ICommand EditTaskCommand { get; }
+        public ICommand DeleteCompletedCommand { get; }
 
         public ToDoListViewModel(TaskService taskService)
         {
             _taskService = taskService;
 
+            // Общая коллекция задач из сервиса
             Tasks = _taskService.GetTasks();
 
+            // Подписываемся на изменения коллекции
             Tasks.CollectionChanged += OnTasksCollectionChanged;
 
+            // Подписываемся на изменения уже существующих задач
             foreach (var task in Tasks)
             {
                 task.PropertyChanged += OnTaskPropertyChanged;
@@ -79,6 +83,8 @@ namespace CSharpMobileApp.ViewModels
             AddTaskCommand = new Command(async () => await Shell.Current.GoToAsync("AddToDoPage"));
             DeleteTaskCommand = new Command<TodoTask>(DeleteTask);
             EditTaskCommand = new Command<TodoTask>(GoToEditTask);
+            DeleteCompletedCommand = new Command(DeleteCompleted);
+
             UpdateCounts();
         }
 
@@ -107,7 +113,9 @@ namespace CSharpMobileApp.ViewModels
         {
             if (e.PropertyName == nameof(TodoTask.Completed))
             {
+                // Обновляем счётчики и просим сервис пересортировать и сохранить
                 UpdateCounts();
+                _taskService.UpdateTasksState();
             }
         }
 
@@ -127,7 +135,6 @@ namespace CSharpMobileApp.ViewModels
             if (task == null)
                 return;
 
-            // Показываем диалог подтверждения
             bool confirm = await Shell.Current.DisplayAlert(
                 "Удалить задачу",
                 $"Вы точно хотите удалить задачу:\n\"{task.Text}\"?",
@@ -138,8 +145,26 @@ namespace CSharpMobileApp.ViewModels
                 return;
 
             _taskService.DeleteTask(task.Id);
+            // Коллекция и счётчики обновятся через события
         }
 
+        private async void DeleteCompleted()
+        {
+            if (!Tasks.Any(t => t.Completed))
+                return;
+
+            bool confirm = await Shell.Current.DisplayAlert(
+                "Удалить выполненные задачи",
+                "Вы уверены, что хотите удалить все выполненные задачи?",
+                "Удалить",
+                "Отмена");
+
+            if (!confirm)
+                return;
+
+            _taskService.DeleteCompleted();
+            // Коллекция и счётчики обновятся через события
+        }
 
         private async void GoToEditTask(TodoTask task)
         {

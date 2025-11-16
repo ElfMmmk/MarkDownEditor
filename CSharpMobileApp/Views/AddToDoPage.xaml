@@ -8,6 +8,7 @@
         <Entry Placeholder="Введите текст задачи"
                 Text="{Binding TaskText}"/>
         <Button Text="Добавить"
-                Command="{Binding AddTaskCommand}"/>
+            Command="{Binding AddTaskCommand}"
+            IsEnabled="{Binding CanAdd}"/>
     </VerticalStackLayout>
 </ContentPage>

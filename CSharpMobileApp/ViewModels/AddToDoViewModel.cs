@@ -17,8 +17,10 @@ namespace CSharpMobileApp.ViewModels
             {
                 _taskText = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TaskText)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanAdd)));
             }
         }
+        public bool CanAdd => !string.IsNullOrWhiteSpace(TaskText);
 
         public ICommand AddTaskCommand { get; }
 

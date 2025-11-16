@@ -1,10 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.Maui.Storage;
 using CSharpMobileApp.Models;
-using System.Collections.ObjectModel;
-
 
 namespace CSharpMobileApp.Services
 {
@@ -25,8 +24,15 @@ namespace CSharpMobileApp.Services
 
         public void AddTask(string text)
         {
-            var newTask = new TodoTask { Id = _nextId++, Text = text, Completed = false };
+            var newTask = new TodoTask
+            {
+                Id = _nextId++,
+                Text = text,
+                Completed = false
+            };
+
             _tasks.Add(newTask);
+            SortTasks();
             SaveTasks();
         }
 
@@ -36,6 +42,7 @@ namespace CSharpMobileApp.Services
             if (task != null)
             {
                 _tasks.Remove(task);
+                SortTasks();
                 SaveTasks();
             }
         }
@@ -46,7 +53,7 @@ namespace CSharpMobileApp.Services
             if (task != null)
             {
                 task.Completed = !task.Completed;
-                SaveTasks();
+                UpdateTasksState();
             }
         }
 
@@ -58,6 +65,29 @@ namespace CSharpMobileApp.Services
                 task.Text = newText;
                 SaveTasks();
             }
+        }
+
+        // Удалить все выполненные задачи
+        public void DeleteCompleted()
+        {
+            var completed = _tasks.Where(t => t.Completed).ToList();
+            if (completed.Count == 0)
+                return;
+
+            foreach (var task in completed)
+            {
+                _tasks.Remove(task);
+            }
+
+            SortTasks();
+            SaveTasks();
+        }
+
+        // Вызывается, когда задача изменилась (например, Completed переключился)
+        public void UpdateTasksState()
+        {
+            SortTasks();
+            SaveTasks();
         }
 
         private void SaveTasks()
@@ -79,6 +109,26 @@ namespace CSharpMobileApp.Services
                 {
                     _nextId = _tasks.Max(t => t.Id) + 1;
                 }
+
+                SortTasks();
+            }
+        }
+
+        // Невыполненные (Completed == false) сверху, выполненные снизу
+        private void SortTasks()
+        {
+            if (_tasks == null || _tasks.Count == 0)
+                return;
+
+            var sorted = _tasks
+                .OrderBy(t => t.Completed)   // false (0) → true (1)
+                .ThenBy(t => t.Id)
+                .ToList();
+
+            _tasks.Clear();
+            foreach (var task in sorted)
+            {
+                _tasks.Add(task);
             }
         }
     }

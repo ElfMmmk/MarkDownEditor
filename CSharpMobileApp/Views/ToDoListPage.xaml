@@ -8,39 +8,53 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="*,Auto,Auto,Auto"
-                          Padding="10">
+                  Padding="10">
                         <Label Grid.Column="0"
-                               Text="{Binding Text}"
-                               TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}"
-                               TextColor="{Binding Completed, Converter={StaticResource BoolToColorConverter}}"
-                               HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center" />
+                       Text="{Binding Text}"
+                       TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}"
+                       TextColor="{Binding Completed, Converter={StaticResource BoolToColorConverter}}"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
                         <CheckBox IsChecked="{Binding Completed}"
-                                  Grid.Column="1"/>
+                          Grid.Column="1"/>
                         <Button Text="Редактировать"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
-                                CommandParameter="{Binding .}"
-                                Grid.Column="2"
-                                Margin="5"/>
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
+                        CommandParameter="{Binding .}"
+                        Grid.Column="2"
+                        Margin="5"/>
                         <Button Text="Удалить"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
-                                CommandParameter="{Binding .}"
-                                Grid.Column="3"
-                                Margin="5"/>
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
+                        CommandParameter="{Binding .}"
+                        Grid.Column="3"
+                        Margin="5"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <Label Text="Задач нет"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               TextColor="Gray"
+               FontSize="16"
+               Margin="0,20" />
+            </CollectionView.EmptyView>
         </CollectionView>
 
-        <Label Grid.Row="1"
-               Text="{Binding TaskSummary}"
-               HorizontalOptions="Center"
-               Margin="0,5"
-               FontSize="12"
-               TextColor="Gray" />
 
-        <Button Grid.Row="2"
-                Text="Добавить"
-                Command="{Binding AddTaskCommand}"/>
+        <Label Grid.Row="1"
+           Text="{Binding TaskSummary}"
+           HorizontalOptions="Center"
+           Margin="0,5"
+           FontSize="12"
+           TextColor="Gray" />
+
+        <HorizontalStackLayout Grid.Row="2" Spacing="10" HorizontalOptions="Center" Margin="0,5,0,10">
+            <Button Text="Добавить"
+            Command="{Binding AddTaskCommand}" />
+            <Button Text="Удалить выполненные"
+            Command="{Binding DeleteCompletedCommand}" />
+        </HorizontalStackLayout>
+
     </Grid>
 </ContentPage>
