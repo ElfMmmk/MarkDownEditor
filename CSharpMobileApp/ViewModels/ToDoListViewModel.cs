@@ -10,7 +10,7 @@ namespace CSharpMobileApp.ViewModels
     public class ToDoListViewModel : INotifyPropertyChanged
     {
         private readonly TaskService _taskService;
-        public ObservableCollection<Task> Tasks { get; set; }
+        public ObservableCollection<TodoTask> Tasks { get; set; }
         public ICommand AddTaskCommand { get; }
         public ICommand DeleteTaskCommand { get; }
         public ICommand EditTaskCommand { get; }
@@ -18,13 +18,13 @@ namespace CSharpMobileApp.ViewModels
         public ToDoListViewModel(TaskService taskService)
         {
             _taskService = taskService;
-            Tasks = new ObservableCollection<Task>(_taskService.GetTasks());
+            Tasks = new ObservableCollection<TodoTask>(_taskService.GetTasks());
             AddTaskCommand = new Command(async () => await Shell.Current.GoToAsync("AddToDoPage"));
-            DeleteTaskCommand = new Command<Task>(DeleteTask);
-            EditTaskCommand = new Command<Task>(GoToEditTask);
+            DeleteTaskCommand = new Command<TodoTask>(DeleteTask);
+            EditTaskCommand = new Command<TodoTask>(GoToEditTask);
         }
 
-        private void DeleteTask(Task task)
+        private void DeleteTask(TodoTask task)
         {
             if (task != null)
             {
@@ -33,11 +33,11 @@ namespace CSharpMobileApp.ViewModels
             }
         }
 
-        private async void GoToEditTask(Task task)
+        private async void GoToEditTask(TodoTask task)
         {
             if (task != null)
             {
-                await Shell.Current.GoToAsync($"EditToDoPage?Task={task.Id}");
+                await Shell.Current.GoToAsync($"EditToDoPage?TodoTask={task.Id}");
             }
         }
 
