@@ -8,7 +8,7 @@
     Title="CSharpMobileApp">
 
     <ShellContent
-        Title="Home"
+        Title="Moskvitin_221-321"
         ContentTemplate="{DataTemplate local:HomePage}"
         Route="HomePage"/>
 

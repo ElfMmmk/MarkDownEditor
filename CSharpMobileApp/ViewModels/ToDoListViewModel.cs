@@ -122,13 +122,24 @@ namespace CSharpMobileApp.ViewModels
             RemainingCount = remaining;
         }
 
-        private void DeleteTask(TodoTask task)
+        private async void DeleteTask(TodoTask task)
         {
             if (task == null)
                 return;
 
+            // Показываем диалог подтверждения
+            bool confirm = await Shell.Current.DisplayAlert(
+                "Удалить задачу",
+                $"Вы точно хотите удалить задачу:\n\"{task.Text}\"?",
+                "Удалить",
+                "Отмена");
+
+            if (!confirm)
+                return;
+
             _taskService.DeleteTask(task.Id);
         }
+
 
         private async void GoToEditTask(TodoTask task)
         {
