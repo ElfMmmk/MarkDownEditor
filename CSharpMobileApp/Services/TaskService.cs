@@ -70,7 +70,7 @@ namespace CSharpMobileApp.Services
             var tasksJson = Preferences.Get("tasks", string.Empty);
             if (!string.IsNullOrEmpty(tasksJson))
             {
-                _tasks = JsonSerializer.Deserialize<List<TodoTask>>(tasksJson);
+                _tasks = JsonSerializer.Deserialize<List<TodoTask>>(tasksJson) ?? new List<TodoTask>();
                 if (_tasks.Any())
                 {
                     _nextId = _tasks.Max(t => t.Id) + 1;

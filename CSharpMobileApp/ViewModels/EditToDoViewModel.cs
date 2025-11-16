@@ -6,7 +6,7 @@ using Microsoft.Maui.Controls;
 
 namespace CSharpMobileApp.ViewModels
 {
-    [QueryProperty(nameof(TaskToEdit), "TodoTask")]
+    [QueryProperty(nameof(TaskToEdit), "TaskToEdit")]
     public class EditToDoViewModel : INotifyPropertyChanged
     {
         private readonly TaskService _taskService;

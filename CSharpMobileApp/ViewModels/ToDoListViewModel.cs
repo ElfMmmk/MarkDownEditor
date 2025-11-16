@@ -1,6 +1,7 @@
 using CSharpMobileApp.Models;
 using CSharpMobileApp.Services;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
@@ -35,11 +36,15 @@ namespace CSharpMobileApp.ViewModels
 
         private async void GoToEditTask(TodoTask task)
         {
-            if (task != null)
-            {
-                await Shell.Current.GoToAsync($"EditToDoPage?TodoTask={task.Id}");
-            }
+            if (task == null)
+                return;
+
+            await Shell.Current.GoToAsync("EditToDoPage", new Dictionary<string, object>
+    {
+        { "TaskToEdit", task }
+    });
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
