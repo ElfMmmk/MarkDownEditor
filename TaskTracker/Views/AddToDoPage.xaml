@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CSharpMobileApp.Views.AddToDoPage"
+             Title="Добавление задачи">
+    <VerticalStackLayout Spacing="20"
+            Padding="20">
+        <Entry Placeholder="Введите текст задачи"
+                Text="{Binding TaskText}"/>
+        <Button Text="Добавить"
+                Command="{Binding AddTaskCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

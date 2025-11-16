@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CSharpMobileApp.Views.EditToDoPage"
+             Title="Редактирование задачи ✍">
+    <VerticalStackLayout Spacing="20"
+            Padding="20">
+        <Entry Text="{Binding TaskText}"/>
+        <Button Text="Сохранить"
+                Command="{Binding EditTaskCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

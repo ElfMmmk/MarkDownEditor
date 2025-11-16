@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CSharpMobileApp.Views.HomePage"
+             Title="Главная">
+    <VerticalStackLayout
+        Spacing="25"
+        Padding="30,0"
+        VerticalOptions="Center">
+
+        <Label
+            Text="Что вы хотите сделать?"
+            FontSize="24"
+            HorizontalOptions="Center"/>
+
+        <Button
+            Text="Посмотреть to-do лист"
+            Command="{Binding GoToToDoListCommand}"/>
+
+        <Button
+            Text="Добавить новую задачу"
+            Command="{Binding GoToAddToDoCommand}"/>
+
+    </VerticalStackLayout>
+</ContentPage>

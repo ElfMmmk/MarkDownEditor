@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CSharpMobileApp.Views.ToDoListPage"
+             Title="Мой список задач 📝">
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView ItemsSource="{Binding Tasks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,Auto,Auto,Auto"
+                          Padding="10">
+                        <Label Text="{Binding Text}"
+                               TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}"/>
+                        <CheckBox IsChecked="{Binding Completed}"
+                                  Grid.Column="1"/>
+                        <Button Text="Редактировать"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="2"/>
+                        <Button Text="Удалить"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="3"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="1"
+                Text="Добавить"
+                Command="{Binding AddTaskCommand}"/>
+    </Grid>
+</ContentPage>
