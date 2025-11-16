@@ -14,11 +14,24 @@ namespace CSharpMobileApp.ViewModels
     {
         private readonly TaskService _taskService;
 
+        // Полный список задач из сервиса
         public ObservableCollection<TodoTask> Tasks { get; }
+
+        // Отфильтрованный список для отображения
+        public ObservableCollection<TodoTask> FilteredTasks { get; } = new();
 
         private int _totalCount;
         private int _completedCount;
         private int _remainingCount;
+
+        private TaskFilter _currentFilter = TaskFilter.All;
+
+        private enum TaskFilter
+        {
+            All,
+            Active,
+            Completed
+        }
 
         public int TotalCount
         {
@@ -63,6 +76,40 @@ namespace CSharpMobileApp.ViewModels
         public ICommand DeleteTaskCommand { get; }
         public ICommand EditTaskCommand { get; }
         public ICommand DeleteCompletedCommand { get; }
+        public ICommand ShowAllCommand { get; }
+        public ICommand ShowActiveCommand { get; }
+        public ICommand ShowCompletedCommand { get; }
+
+        // Состояния для RadioButton'ов
+        public bool IsAllFilterSelected
+        {
+            get => _currentFilter == TaskFilter.All;
+            set
+            {
+                if (value)
+                    SetFilter(TaskFilter.All);
+            }
+        }
+
+        public bool IsActiveFilterSelected
+        {
+            get => _currentFilter == TaskFilter.Active;
+            set
+            {
+                if (value)
+                    SetFilter(TaskFilter.Active);
+            }
+        }
+
+        public bool IsCompletedFilterSelected
+        {
+            get => _currentFilter == TaskFilter.Completed;
+            set
+            {
+                if (value)
+                    SetFilter(TaskFilter.Completed);
+            }
+        }
 
         public ToDoListViewModel(TaskService taskService)
         {
@@ -85,7 +132,33 @@ namespace CSharpMobileApp.ViewModels
             EditTaskCommand = new Command<TodoTask>(GoToEditTask);
             DeleteCompletedCommand = new Command(DeleteCompleted);
 
+            // Команды фильтра (можно не использовать в XAML)
+            ShowAllCommand = new Command(() => SetFilter(TaskFilter.All));
+            ShowActiveCommand = new Command(() => SetFilter(TaskFilter.Active));
+            ShowCompletedCommand = new Command(() => SetFilter(TaskFilter.Completed));
+
             UpdateCounts();
+            ApplyFilter();
+
+            // Обновим биндинги RadioButton'ов
+            OnPropertyChanged(nameof(IsAllFilterSelected));
+            OnPropertyChanged(nameof(IsActiveFilterSelected));
+            OnPropertyChanged(nameof(IsCompletedFilterSelected));
+        }
+
+        private void SetFilter(TaskFilter filter)
+        {
+            if (_currentFilter == filter)
+                return;
+
+            _currentFilter = filter;
+
+            // Обновляем RadioButton'ы
+            OnPropertyChanged(nameof(IsAllFilterSelected));
+            OnPropertyChanged(nameof(IsActiveFilterSelected));
+            OnPropertyChanged(nameof(IsCompletedFilterSelected));
+
+            ApplyFilter();
         }
 
         private void OnTasksCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -107,15 +180,17 @@ namespace CSharpMobileApp.ViewModels
             }
 
             UpdateCounts();
+            ApplyFilter();
         }
 
         private void OnTaskPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(TodoTask.Completed))
             {
-                // Обновляем счётчики и просим сервис пересортировать и сохранить
+                // Обновляем счётчики и даём сервису пересортировать и сохранить
                 UpdateCounts();
                 _taskService.UpdateTasksState();
+                ApplyFilter();
             }
         }
 
@@ -128,6 +203,33 @@ namespace CSharpMobileApp.ViewModels
             TotalCount = total;
             CompletedCount = completed;
             RemainingCount = remaining;
+        }
+
+        private void ApplyFilter()
+        {
+            if (Tasks == null)
+                return;
+
+            IEnumerable<TodoTask> source = Tasks;
+
+            switch (_currentFilter)
+            {
+                case TaskFilter.Active:
+                    source = source.Where(t => !t.Completed);
+                    break;
+                case TaskFilter.Completed:
+                    source = source.Where(t => t.Completed);
+                    break;
+                case TaskFilter.All:
+                default:
+                    break;
+            }
+
+            FilteredTasks.Clear();
+            foreach (var task in source)
+            {
+                FilteredTasks.Add(task);
+            }
         }
 
         private async void DeleteTask(TodoTask task)
@@ -145,7 +247,7 @@ namespace CSharpMobileApp.ViewModels
                 return;
 
             _taskService.DeleteTask(task.Id);
-            // Коллекция и счётчики обновятся через события
+            // Коллекция и фильтр обновятся через события
         }
 
         private async void DeleteCompleted()
@@ -163,7 +265,7 @@ namespace CSharpMobileApp.ViewModels
                 return;
 
             _taskService.DeleteCompleted();
-            // Коллекция и счётчики обновятся через события
+            // Коллекция и фильтр обновятся через события
         }
 
         private async void GoToEditTask(TodoTask task)

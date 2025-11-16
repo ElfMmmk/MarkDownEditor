@@ -2,58 +2,95 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CSharpMobileApp.Views.ToDoListPage"
-             Title="Мой список задач 📝">
-    <Grid RowDefinitions="*,Auto,Auto">
-        <CollectionView ItemsSource="{Binding Tasks}">
+             Title="ToDo-List">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+        <!-- Фильтры: Все / Активные / Выполненные -->
+        <Frame Grid.Row="0"
+           Padding="8,4"
+           Margin="0,10,10,5"
+           BorderColor="{StaticResource Primary}"
+           BackgroundColor="{StaticResource Secondary}"
+           CornerRadius="16"
+           HorizontalOptions="End"
+           HasShadow="False">
+
+            <HorizontalStackLayout Spacing="10">
+
+                <RadioButton Content="Все"
+                     GroupName="TaskFilter"
+                     IsChecked="{Binding IsAllFilterSelected}"
+                     Margin="4,0" />
+
+                <RadioButton Content="Активные"
+                     GroupName="TaskFilter"
+                     IsChecked="{Binding IsActiveFilterSelected}"
+                     Margin="4,0" />
+
+                <RadioButton Content="Выполненные"
+                     GroupName="TaskFilter"
+                     IsChecked="{Binding IsCompletedFilterSelected}"
+                     Margin="4,0" />
+            </HorizontalStackLayout>
+        </Frame>
+
+        <!-- Список задач, теперь с FilteredTasks -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding FilteredTasks}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="*,Auto,Auto,Auto"
-                  Padding="10">
+                          Padding="10">
                         <Label Grid.Column="0"
-                       Text="{Binding Text}"
-                       TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}"
-                       TextColor="{Binding Completed, Converter={StaticResource BoolToColorConverter}}"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
+                               Text="{Binding Text}"
+                               TextDecorations="{Binding Completed, Converter={StaticResource BoolToStrikethroughConverter}}"
+                               TextColor="{Binding Completed, Converter={StaticResource BoolToColorConverter}}"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center" />
                         <CheckBox IsChecked="{Binding Completed}"
-                          Grid.Column="1"/>
+                                  Grid.Column="1"/>
                         <Button Text="Редактировать"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
-                        CommandParameter="{Binding .}"
-                        Grid.Column="2"
-                        Margin="5"/>
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="2"
+                                Margin="5"/>
                         <Button Text="Удалить"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
-                        CommandParameter="{Binding .}"
-                        Grid.Column="3"
-                        Margin="5"/>
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="3"
+                                Margin="5"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
 
             <CollectionView.EmptyView>
                 <Label Text="Задач нет"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"
-               TextColor="Gray"
-               FontSize="16"
-               Margin="0,20" />
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"
+                       FontSize="16"
+                       Margin="0,20" />
             </CollectionView.EmptyView>
         </CollectionView>
 
+        <!-- Сводка -->
+        <Label Grid.Row="2"
+               Text="{Binding TaskSummary}"
+               HorizontalOptions="Center"
+               Margin="0,5"
+               FontSize="12"
+               TextColor="Gray" />
 
-        <Label Grid.Row="1"
-           Text="{Binding TaskSummary}"
-           HorizontalOptions="Center"
-           Margin="0,5"
-           FontSize="12"
-           TextColor="Gray" />
-
-        <HorizontalStackLayout Grid.Row="2" Spacing="10" HorizontalOptions="Center" Margin="0,5,0,10">
+        <!-- Кнопки снизу -->
+        <HorizontalStackLayout Grid.Row="3"
+                               Spacing="10"
+                               HorizontalOptions="Center"
+                               Margin="0,5,0,10">
             <Button Text="Добавить"
-            Command="{Binding AddTaskCommand}" />
+                    Command="{Binding AddTaskCommand}" />
             <Button Text="Удалить выполненные"
-            Command="{Binding DeleteCompletedCommand}" />
+                    Command="{Binding DeleteCompletedCommand}" />
         </HorizontalStackLayout>
 
     </Grid>
