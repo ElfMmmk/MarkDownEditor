@@ -378,6 +378,7 @@ namespace MarkdownEditor
             var textBlock = new TextBlock
             {
                 FontSize = 14,
+                FontFamily = "Times New Roman",
                 Foreground = Avalonia.Media.Brushes.Black,
                 Margin = new Avalonia.Thickness(0, 0, 0, 10),
                 TextWrapping = Avalonia.Media.TextWrapping.Wrap
